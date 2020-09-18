@@ -75,7 +75,7 @@ def get_env(build_dir):
           key, value = arg.split("=", 1)
       except ValueError:
           break
-      ENV[key] = value 
+      ENV[key] = value
   del sys.argv[1:i+1]
 
   return ENV
@@ -99,7 +99,8 @@ ENV = get_env(BUILD_DIR)
 
 # Find the paths
 BUILT_EXTENSIONS = False
-CMAKE_PATH = ENV.get("CMAKE", find_executable("cmake"))
+# CMAKE_PATH = ENV.get("CMAKE", find_executable("cmake"))
+CMAKE_PATH = "/usr/local/cmake-3.12.4/bin/cmake"
 MAKE_PATH = ENV.get("MAKE", find_executable("make"))
 MAKE_FLAGS = ENV.get("MAKE_FLAGS", "-j %d" % cpu_count()).split()
 CC_PATH = ENV.get("CC", find_executable("gcc"))
@@ -108,7 +109,8 @@ INSTALL_PREFIX = os.path.join(get_python_lib(), os.pardir, os.pardir, os.pardir)
 PYTHON = sys.executable
 
 # Try to find Eigen
-EIGEN3_INCLUDE_DIR = ENV.get("EIGEN3_INCLUDE_DIR")  # directory where eigen is saved
+# EIGEN3_INCLUDE_DIR = ENV.get("EIGEN3_INCLUDE_DIR")  # directory where eigen is saved
+EIGEN3_INCLUDE_DIR = "/io/wheelhouse/dynet/eigen-3.3.7"
 # The cmake directory and Python directory are different in manual install, so
 # will break if relative path is specified. Try moving up if path is specified
 # but not found
@@ -117,8 +119,8 @@ if (EIGEN3_INCLUDE_DIR is not None and
     os.path.isdir(os.path.join(os.pardir, EIGEN3_INCLUDE_DIR))):
     EIGEN3_INCLUDE_DIR = os.path.join(os.pardir, EIGEN3_INCLUDE_DIR)
 
-EIGEN3_DOWNLOAD_URL = ENV.get("EIGEN3_DOWNLOAD_URL", "https://gitlab.com/libeigen/eigen/-/archive/1c8b9e10a791cb43b4f730dcb5d7889099cc1c68/eigen-1c8b9e10a791cb43b4f730dcb5d7889099cc1c68.zip") 
-    
+EIGEN3_DOWNLOAD_URL = ENV.get("EIGEN3_DOWNLOAD_URL", "https://gitlab.com/libeigen/eigen/-/archive/1c8b9e10a791cb43b4f730dcb5d7889099cc1c68/eigen-1c8b9e10a791cb43b4f730dcb5d7889099cc1c68.zip")
+
 # Remove the "-Wstrict-prototypes" compiler option, which isn't valid for C++.
 cfg_vars = distutils.sysconfig.get_config_vars()
 CFLAGS = cfg_vars.get("CFLAGS")
@@ -186,7 +188,7 @@ class build(_build):
         ("build-dir=", None, "New or existing DyNet build directory."),
         ("skip-build", None, "Assume DyNet C++ library is already built."),
     ]
-        
+
     def __init__(self, *args, **kwargs):
         self.build_dir = None
         self.skip_build = False
@@ -204,7 +206,7 @@ class build(_build):
         BUILD_DIR = os.path.abspath(self.build_dir)
         if EIGEN3_INCLUDE_DIR is None:
             EIGEN3_INCLUDE_DIR = os.path.join(BUILD_DIR, "eigen")
-        EIGEN3_INCLUDE_DIR = os.path.abspath(EIGEN3_INCLUDE_DIR)    
+        EIGEN3_INCLUDE_DIR = os.path.abspath(EIGEN3_INCLUDE_DIR)
         log.info("CMAKE_PATH=%r" % CMAKE_PATH)
         log.info("MAKE_PATH=%r" % MAKE_PATH)
         log.info("MAKE_FLAGS=%r" % " ".join(MAKE_FLAGS))
@@ -359,42 +361,27 @@ except:
     long_description = ""
 
 setup(
-    name="dyNET",
-    # version="0.0.0",
+    name="dyNET38",
+    version="2.1",
     install_requires=["cython", "numpy"],
-    description="The Dynamic Neural Network Toolkit",
+    description="Fork version of DyNet: DyNet38 shares wheels of DyNet for Python 3.8+",
     long_description=long_description,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
-        "Environment :: MacOS X",
-        "Environment :: Win32 (MS Windows)",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: Apache Software License",
-        "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX",
         "Operating System :: POSIX :: Linux",
-        "Operating System :: Microsoft",
-        "Operating System :: Microsoft :: Windows",
-        "Programming Language :: C++",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.2",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
-    author="Graham Neubig",
-    author_email="dynet-users@googlegroups.com",
-    url="https://github.com/clab/dynet",
-    download_url="https://github.com/clab/dynet/releases",
+    url="https://github.com/taishi-i/dynet",
+    maintainer="Taishi Ikeda",
+    maintainer_email="taishi.ikeda.0323@gmail.com",
     license="Apache 2.0",
     cmdclass={"build": build, "build_py": build_py, "install_data": install_data, "build_ext": build_ext},
     ext_modules=TARGET,
