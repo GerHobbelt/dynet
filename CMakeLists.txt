@@ -22,6 +22,12 @@ if(ENABLE_NONNATIVE)
   message("-- Enabling NONNATIVE")
 endif(ENABLE_NONNATIVE)
 
+option(ENABLE_APPLE "Compile for Apple silicon (e.g., M1) rather than the Intel processor" OFF)
+
+if(ENABLE_APPLE)
+  message("-- Enabling APPLE")
+endif(ENABLE_APPLE)
+
 option(ENABLE_RELOCATABLE "Link code in a relocatable way so that executable files can be moved" OFF)
 
 if(ENABLE_RELOCATABLE)
@@ -102,7 +108,11 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -fno-finite-math-only -Wall -Wno-missing-braces -std=c++11 -g")
   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -fno-omit-frame-pointer")
   if(ENABLE_NONNATIVE)
-    set(CMAKE_CXX_FLAGS_RELEASE "-funroll-loops -O3 -mcpu=apple-m1") # kwa: -O3 used to be -Ofast
+    if (ENABLE_APPLE)
+      set(CMAKE_CXX_FLAGS_RELEASE "-funroll-loops -O3 -mcpu=apple-m1") # kwa: -O3 used to be -Ofast
+    else()
+      set(CMAKE_CXX_FLAGS_RELEASE "-funroll-loops -O3 -march=x86-64") # kwa: -O3 used to be -Ofast
+    endif()
   else()
     set(CMAKE_CXX_FLAGS_RELEASE "-funroll-loops -O3 -march=native") # kwa: -O3 used to be -Ofast
   endif()

@@ -4,7 +4,6 @@
  */
 
 #include "gzguts.h"
-#include <unistd.h> // m1 mac
 
 /* Local functions */
 local int gz_load OF((gz_statep, unsigned char *, unsigned, unsigned *));

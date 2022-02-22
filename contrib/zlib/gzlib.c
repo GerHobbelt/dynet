@@ -4,7 +4,6 @@
  */
 
 #include "gzguts.h"
-#include <unistd.h> // m1 mac
 
 #if defined(_WIN32) && !defined(__BORLANDC__) && !defined(__MINGW32__)
 #  define LSEEK _lseeki64
