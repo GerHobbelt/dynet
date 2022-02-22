@@ -18,6 +18,9 @@ python/dyNET.egg-info/
 #data
 rnnlm/ptb-mikolov/
 
+# Mac
+.DS_Store
+
 # Cruft
 *.class
 *.cache
