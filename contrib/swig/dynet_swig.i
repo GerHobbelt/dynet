@@ -35,17 +35,32 @@
       return text;
   }
 
+  static Boolean isMac() {
+    return System.getProperty("os.name").startsWith("Mac ");
+  }
+
+  static Boolean isApple() {
+    return System.getProperty("os.arch").equals("aarch64");
+  }
+
   static {
     String filename = "dynet_swig";
     String libname = System.mapLibraryName(filename);
     // The Mac reports a libname ending with .dylib, but Java needs .jnilib instead.
     String jniname = replaceSuffix(libname, ".dylib", ".jnilib");
+    String resourcename = !isMac() ? jniname : (isApple() ? "apple-" + jniname: "intel-" + jniname);
 
     boolean loaded = false;
-    if (!loaded)
+    if (!loaded) {
+      String location = System.getProperty("user.dir");
+      System.err.println("[dynet] Checking " + location + " for " + jniname + "...");
       loaded = loadFromFile(System.getProperty("user.dir"), jniname); // Try current directory first.
-    if (!loaded)
-      loaded = loadFromFile(System.getProperty("user.home"), jniname); // Try home directory next.
+    }
+    if (!loaded) {
+      String location = System.getProperty("user.home");
+      System.err.println("[dynet] Checking " + location + " for " + jniname + "...");
+      loaded = loadFromFile(location, jniname); // Try home directory next.
+    }
     if (!loaded) {
       try {
         // Attempt to load from the resource via the tmp directory.
@@ -53,10 +68,11 @@
         String prefix = jniname.substring(0, index);
         String suffix = jniname.substring(index);
         File tempFile = File.createTempFile(prefix + "-", suffix);
+        System.err.println("[dynet] Extracting resource " + resourcename + " to " + tempFile.getAbsolutePath() + "...");
 
         // Load the jnilib from the JAR-ed resource file, and write it to the temp file.
         // We've anticipated the name and used it for the resource, but that could go wrong.
-        InputStream is = dynet_swigJNI.class.getClassLoader().getResourceAsStream(jniname);
+        InputStream is = dynet_swigJNI.class.getClassLoader().getResourceAsStream(resourcename);
         OutputStream os = new FileOutputStream(tempFile);
 
         byte buf[] = new byte[8192];
@@ -82,7 +98,7 @@
       }
     }
   }
-
+  
 %}
 
 // Required header files for compiling wrapped code
