@@ -98,7 +98,6 @@
       }
     }
   }
-  
 %}
 
 // Required header files for compiling wrapped code
