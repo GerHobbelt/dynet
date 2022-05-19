@@ -78,11 +78,6 @@ jobs:
     - os: linux
       compiler: gcc
       language: cpp
-      env: PYVER=3.4 PYNUM=3 PYTHON_INSTALL=manual
-      if: type = cron OR tag IS present
-    - os: linux
-      compiler: gcc
-      language: cpp
       env: PYVER=3.5 PYNUM=3 PYTHON_INSTALL=manual
       if: type = cron OR tag IS present
     - os: linux
@@ -164,10 +159,6 @@ jobs:
       before_script: pip install dynet
       script: python tests/python/test.py
     - os: osx
-      env: PYVER=3.4 PYNUM=3
-      before_script: pip install dynet
-      script: python tests/python/test.py
-    - os: osx
       env: PYVER=3.5 PYNUM=3
       before_script: pip install dynet
       script: python tests/python/test.py
@@ -190,11 +181,6 @@ jobs:
       script: python tests/python/test.py
     - os: linux
       language: python
-      python: 3.4
-      before_script: pip install dynet
-      script: python tests/python/test.py
-    - os: linux
-      language: python
       python: 3.5
       before_script: pip install dynet
       script: python tests/python/test.py
@@ -210,22 +196,26 @@ jobs:
       script: python setup.py sdist
       if: tag IS present
     - os: linux
+      dist: xenial
       language: python
       python: 3.7
       before_script: pip install dynet
       script: python tests/python/test.py
     - os: linux
+      dist: xenial
       language: python
       python: 3.8
       before_script: pip install dynet
       script: python tests/python/test.py
     - os: linux
+      dist: xenial
       language: python
       python: 3.7
       before_script: .travis/fix_version.sh
       script: python setup.py sdist
       if: tag IS present
     - os: linux
+      dist: xenial
       language: python
       python: 3.8
       before_script: .travis/fix_version.sh
