@@ -25,7 +25,7 @@ using namespace dynet;
 using namespace transformer;
 using namespace boost::program_options;
 
-// hyper-paramaters for training
+// hyper-parameters for training
 unsigned MINIBATCH_SIZE = 1;
 
 bool DEBUGGING_FLAG = false;
