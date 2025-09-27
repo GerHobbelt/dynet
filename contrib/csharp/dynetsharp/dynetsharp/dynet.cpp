@@ -2858,7 +2858,7 @@ namespace dynetsharp {
 	Expression ^DynetFunctions::random_gumbel(array<long> ^dim, float mu, float beta, int batchSize, String ^device) {
 		ExceptionWrap(
 			if (mu != 0.0 || beta != 1.0)
-				throw gcnew Exception(gcnew String("Currently only paramters of mu=0.0 and beta=1.0 are supported."));
+				throw gcnew Exception(gcnew String("Currently only parameters of mu=0.0 and beta=1.0 are supported."));
 		dynet::Dim d(ConvertArrayToVector<long>(dim), batchSize);
 		return gcnew Expression(dynet::random_gumbel(*cg, d, mu, beta, str2dev(device)));
 		)

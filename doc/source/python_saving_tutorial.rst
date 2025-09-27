@@ -99,7 +99,7 @@ Use the module level ``dy.save(basename, lst)`` and ``dy.load(basename, param_co
 ``dy.save`` gets a base filename and a list of saveable objects (see below), and saves them to file.
 
 ``dy.load`` gets a base filename and a parameter collection (model), and returns a
-list of objects, in the same order that were passed to ``dy.save``. The paramters
+list of objects, in the same order that were passed to ``dy.save``. The parameters
 of the objects are added to the model.
 
 Notice that you do not need to specify sizes when loading.
